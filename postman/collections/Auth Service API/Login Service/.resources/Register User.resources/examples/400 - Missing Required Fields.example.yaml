@@ -1,6 +1,6 @@
 $kind: http-example
 request:
-  url: '{{baseUrl}}:{{loginServicePort}}/api/auth/register'
+  url: "{{baseUrl}}:{{loginServicePort}}/api/auth/register"
   method: POST
   headers:
     Content-Type: application/json
@@ -14,5 +14,7 @@ response:
     Content-Type: application/json
   body:
     type: json
-    content: '{"error": "Bad Request", "message": "Missing required fields: password, name", "statusCode": 400, "timestamp": "2024-01-15T10:30:00.000Z", "path": "/api/auth/register"}'
+    content: '{"error": "Bad Request", "message": "Missing required fields:
+      password, name", "statusCode": 400, "timestamp":
+      "2024-01-15T10:30:00.000Z", "path": "/api/auth/register"}'
 order: 1000

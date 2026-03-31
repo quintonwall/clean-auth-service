@@ -60,7 +60,8 @@ scripts:
       });
 
 
-      // CRITICAL: Save accessToken to collection variables for subsequent requests
+      // CRITICAL: Save accessToken to collection variables for subsequent
+      requests
 
       if (pm.response.code === 201) {
           const jsonData = pm.response.json();
@@ -85,7 +86,8 @@ scripts:
 
       // Generate random password meeting requirements:
 
-      // 8-128 characters with at least one lowercase, one uppercase, one number, and one special character
+      // 8-128 characters with at least one lowercase, one uppercase, one
+      number, and one special character
 
       function generatePassword() {
           const lowercase = 'abcdefghijklmnopqrstuvwxyz';

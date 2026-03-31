@@ -1,12 +1,13 @@
 $kind: http-example
 request:
-  url: '{{baseUrl}}:{{loginServicePort}}/api/auth/register'
+  url: "{{baseUrl}}:{{loginServicePort}}/api/auth/register"
   method: POST
   headers:
     Content-Type: application/json
   body:
     type: json
-    content: '{"email": "user@example.com", "password": "SecurePass123!", "name": "John Doe"}'
+    content: '{"email": "user@example.com", "password": "SecurePass123!", "name":
+      "John Doe"}'
 response:
   statusCode: 429
   statusText: Too Many Requests
@@ -14,5 +15,8 @@ response:
     Content-Type: application/json
   body:
     type: json
-    content: '{"error": "Too Many Requests", "message": "Rate limit exceeded. Please try again later.", "statusCode": 429, "timestamp": "2024-01-15T10:30:00.000Z", "path": "/api/auth/register", "retryAfter": 60}'
+    content: '{"error": "Too Many Requests", "message": "Rate limit exceeded. Please
+      try again later.", "statusCode": 429, "timestamp":
+      "2024-01-15T10:30:00.000Z", "path": "/api/auth/register", "retryAfter":
+      60}'
 order: 4000

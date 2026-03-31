@@ -45,7 +45,8 @@ scripts:
           pm.expect(jsonData).to.be.an("object");
       });
 
-      // Re-authenticate after logout to get a fresh token for subsequent requests
+      // Re-authenticate after logout to get a fresh token for subsequent
+      requests
 
       if (pm.response.code === 200) {
           const baseUrl = pm.collectionVariables.get('baseUrl');

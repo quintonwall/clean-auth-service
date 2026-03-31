@@ -1,6 +1,6 @@
 $kind: http-example
 request:
-  url: '{{baseUrl}}:{{logoutServicePort}}/api/logout'
+  url: "{{baseUrl}}:{{logoutServicePort}}/api/logout"
   method: POST
   headers:
     Authorization: Bearer {{accessToken}}
