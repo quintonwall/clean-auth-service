@@ -1,0 +1,139 @@
+$kind: http-request
+description: Register a new user. Password must be 8-128 characters with at
+  least one lowercase, one uppercase, one number, and one special character.
+url: "{{baseUrl}}:{{loginServicePort}}/api/auth/register"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: '{"email":"{{randomEmail}}","password":"Test@123"}'
+scripts:
+  - type: afterResponse
+    code: >-
+      // Register User Tests
+
+
+      pm.test("Status code is 201", function () {
+          pm.response.to.have.status(201);
+      });
+
+
+      pm.test("Response time is acceptable (under 1000ms)", function () {
+          pm.expect(pm.response.responseTime).to.be.below(1000);
+      });
+
+
+      pm.test("Content-Type header is application/json", function () {
+          pm.expect(pm.response.headers.get("Content-Type")).to.include("application/json");
+      });
+
+
+      pm.test("Response has success field set to true", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property("success");
+          pm.expect(jsonData.success).to.be.true;
+      });
+
+
+      pm.test("Response has data.user object", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property("data");
+          pm.expect(jsonData.data).to.have.property("user");
+          pm.expect(jsonData.data.user).to.be.an("object");
+      });
+
+
+      pm.test("User object has id and email", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData.data.user).to.have.property("id");
+          pm.expect(jsonData.data.user).to.have.property("email");
+          pm.expect(jsonData.data.user.email).to.be.a("string");
+      });
+
+
+      pm.test("Response has data.accessToken", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData.data).to.have.property("accessToken");
+          pm.expect(jsonData.data.accessToken).to.be.a("string");
+          pm.expect(jsonData.data.accessToken.length).to.be.greaterThan(0);
+      });
+
+
+      // CRITICAL: Save accessToken to collection variables for subsequent requests
+
+      if (pm.response.code === 201) {
+          const jsonData = pm.response.json();
+          if (jsonData.data && jsonData.data.accessToken) {
+              pm.collectionVariables.set("accessToken", jsonData.data.accessToken);
+              console.log("Access token saved to collection variables");
+          }
+          if (jsonData.data && jsonData.data.user && jsonData.data.user.email) {
+              pm.collectionVariables.set("userEmail", jsonData.data.user.email);
+              console.log("User email saved to collection variables");
+          }
+      }
+    language: text/javascript
+  - type: beforeRequest
+    code: >-
+      // Generate random email address
+
+      const randomString = Math.random().toString(36).substring(2, 10);
+
+      const randomEmail = `user_${randomString}@example.com`;
+
+
+      // Generate random password meeting requirements:
+
+      // 8-128 characters with at least one lowercase, one uppercase, one number, and one special character
+
+      function generatePassword() {
+          const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+          const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+          const numbers = '0123456789';
+          const special = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+          const allChars = lowercase + uppercase + numbers + special;
+          
+          // Ensure at least one of each required character type
+          let password = '';
+          password += lowercase.charAt(Math.floor(Math.random() * lowercase.length));
+          password += uppercase.charAt(Math.floor(Math.random() * uppercase.length));
+          password += numbers.charAt(Math.floor(Math.random() * numbers.length));
+          password += special.charAt(Math.floor(Math.random() * special.length));
+          
+          // Fill remaining characters (random length between 8-16 for practicality)
+          const remainingLength = Math.floor(Math.random() * 9) + 4; // 4-12 more chars (total 8-16)
+          for (let i = 0; i < remainingLength; i++) {
+              password += allChars.charAt(Math.floor(Math.random() * allChars.length));
+          }
+          
+          // Shuffle the password to randomize character positions
+          password = password.split('').sort(() => Math.random() - 0.5).join('');
+          
+          return password;
+      }
+
+
+      const randomPassword = generatePassword();
+
+
+      // Set as local variables for use in request body
+
+      pm.variables.set('randomEmail', randomEmail);
+
+      pm.variables.set('randomPassword', randomPassword);
+
+
+      // Save to collection variables for use in Login request
+
+      pm.collectionVariables.set('randomEmail', randomEmail);
+
+      pm.collectionVariables.set('randomPassword', randomPassword);
+
+
+      console.log('Generated email:', randomEmail);
+
+      console.log('Generated password:', randomPassword);
+    language: text/javascript
+examples: ./.resources/Register User.resources/examples
+order: 3000

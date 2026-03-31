@@ -1,0 +1,31 @@
+info:
+  name: Auth Service API
+  description: |
+    A secure, production-ready authentication system built with a microservices architecture.
+    - **Login Service** (port 3001): Handles user authentication and token generation
+    - **Logout Service** (port 3002): Manages token invalidation and session management
+  schema: https://schema.getpostman.com/json/collection/v2.1.0/collection.json
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: "{{accessToken}}"
+variable:
+  - key: baseUrl
+    value: "http://localhost"
+  - key: loginServicePort
+    value: "3001"
+  - key: logoutServicePort
+    value: "3002"
+  - key: accessToken
+    value: ""
+  - key: refreshToken
+    value: ""
+  - key: userId
+    value: ""
+  - key: randomEmail
+    value: ""
+  - key: randomPassword
+    value: ""
+  - key: userEmail
+    value: ""

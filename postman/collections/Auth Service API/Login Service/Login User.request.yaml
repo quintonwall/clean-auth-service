@@ -1,0 +1,44 @@
+$kind: http-request
+description: Login user and receive access token and refresh token (stored as
+  HTTP-only cookie)
+url: "{{baseUrl}}:{{loginServicePort}}/api/auth/login"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: '{"email":"{{randomEmail}}","password":"Test@123"}'
+scripts:
+  - type: afterResponse
+    code: |-
+      // Set next request to Get All Active Sessions on successful login
+      if (pm.response.code === 200) {
+          pm.execution.setNextRequest("Get All Active Sessions");
+      }
+    language: text/javascript
+  - type: beforeRequest
+    code: >-
+      // Check if we have saved credentials from registration
+
+      const savedEmail = pm.collectionVariables.get('randomEmail');
+
+      const savedPassword = pm.collectionVariables.get('randomPassword');
+
+
+      if (savedEmail && savedPassword) {
+          // Use the saved credentials from registration
+          pm.variables.set('randomEmail', savedEmail);
+          pm.variables.set('randomPassword', savedPassword);
+          console.log('Using saved credentials from registration');
+          console.log('Email:', savedEmail);
+      } else {
+          // No credentials found - user must run Register User request first
+          console.error('ERROR: No credentials found in collection variables.');
+          console.error('Please run the "Register User" request first to create an account.');
+          console.error('The Login User request requires credentials that are saved during registration.');
+          
+          // Throw an error to prevent the request from being sent
+          throw new Error('No credentials available. Please run the Register User request first.');
+      }
+    language: text/javascript
+order: 4000

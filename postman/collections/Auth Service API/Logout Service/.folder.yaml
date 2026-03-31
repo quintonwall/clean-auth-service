@@ -1,0 +1,2 @@
+name: Logout Service
+description: Logout Service endpoints for token invalidation, session management, and cleanup.

@@ -1,0 +1,18 @@
+$kind: http-example
+request:
+  url: '{{baseUrl}}:{{loginServicePort}}/api/auth/register'
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: '{"email": "invalid-email", "password": "SecurePass123!", "name": "John Doe"}'
+response:
+  statusCode: 422
+  statusText: Unprocessable Entity (WebDAV) (RFC 4918)
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: '{"error": "Unprocessable Entity", "message": "Validation failed", "statusCode": 422, "timestamp": "2024-01-15T10:30:00.000Z", "path": "/api/auth/register", "details": [{"field": "email", "message": "Invalid email format"}, {"field": "password", "message": "Password must be at least 8 characters long"}]}'
+order: 3000

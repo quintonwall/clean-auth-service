@@ -1,0 +1,55 @@
+$kind: http-request
+description: Manually invalidate a specific token. Token type must be 'access' or 'refresh'.
+url: "{{baseUrl}}:{{logoutServicePort}}/api/invalidate-token"
+method: POST
+headers:
+  Authorization: Bearer {{accessToken}}
+  Content-Type: application/json
+body:
+  type: text
+  content: |-
+    {
+      "token": "jwt_token_to_invalidate",
+      "tokenType": "access"
+    }
+scripts:
+  - type: afterResponse
+    code: >-
+      // Invalidate Specific Token Tests
+
+
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+
+      pm.test("Response time is acceptable (under 500ms)", function () {
+          pm.expect(pm.response.responseTime).to.be.below(500);
+      });
+
+
+      pm.test("Content-Type header is application/json", function () {
+          pm.expect(pm.response.headers.get("Content-Type")).to.include("application/json");
+      });
+
+
+      pm.test("Response has success field set to true", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property("success");
+          pm.expect(jsonData.success).to.be.true;
+      });
+
+
+      pm.test("Response has message field", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property("message");
+          pm.expect(jsonData.message).to.be.a("string");
+      });
+
+
+      pm.test("Response has valid JSON structure", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.be.an("object");
+      });
+    language: text/javascript
+order: 4000

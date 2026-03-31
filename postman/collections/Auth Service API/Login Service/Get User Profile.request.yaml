@@ -1,0 +1,49 @@
+$kind: http-request
+description: Get the current user's profile information. Requires valid access token.
+url: "{{baseUrl}}:{{loginServicePort}}/api/auth/me"
+method: GET
+headers:
+  Authorization: Bearer {{accessToken}}
+scripts:
+  - type: afterResponse
+    code: >-
+      // Get User Profile Tests
+
+
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+
+      pm.test("Response time is acceptable (under 500ms)", function () {
+          pm.expect(pm.response.responseTime).to.be.below(500);
+      });
+
+
+      pm.test("Content-Type header is application/json", function () {
+          pm.expect(pm.response.headers.get("Content-Type")).to.include("application/json");
+      });
+
+
+      pm.test("Response has success field set to true", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property("success");
+          pm.expect(jsonData.success).to.be.true;
+      });
+
+
+      pm.test("Response has data.user object", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property("data");
+          pm.expect(jsonData.data).to.have.property("user");
+          pm.expect(jsonData.data.user).to.be.an("object");
+      });
+
+
+      pm.test("User object has required fields", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData.data.user).to.have.property("id");
+          pm.expect(jsonData.data.user).to.have.property("email");
+      });
+    language: text/javascript
+order: 5000

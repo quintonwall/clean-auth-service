@@ -1,0 +1,80 @@
+$kind: http-request
+description: 'Generated from cURL: curl -X GET
+  "http://localhost:3002/api/sessions" -H "Authorization: Bearer
+  {{accessToken}}"'
+url: http://localhost:3002/api/sessions
+method: GET
+headers:
+  Authorization: Bearer {{accessToken}}
+scripts:
+  - type: afterResponse
+    code: >-
+      // 1. Status code is 200
+
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+
+      // 2. Response time is acceptable (under 1000ms)
+
+      pm.test("Response time is under 1000ms", function () {
+          pm.expect(pm.response.responseTime).to.be.below(1000);
+      });
+
+
+      // 3. Content-Type header is application/json
+
+      pm.test("Content-Type header is application/json", function () {
+          pm.expect(pm.response.headers.get("Content-Type")).to.include("application/json");
+      });
+
+
+      // 4. Response has success=true
+
+      pm.test("Response has success equal to true", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property("success");
+          pm.expect(jsonData.success).to.be.true;
+      });
+
+
+      // 5. Response has data.activeSessions array
+
+      pm.test("Response has data.activeSessions array", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property("data");
+          pm.expect(jsonData.data).to.have.property("activeSessions");
+          pm.expect(jsonData.data.activeSessions).to.be.an("array");
+      });
+
+
+      // 6. Response has data.totalSessions number
+
+      pm.test("Response has data.totalSessions as a number", function () {
+          const jsonData = pm.response.json();
+          pm.expect(jsonData).to.have.property("data");
+          pm.expect(jsonData.data).to.have.property("totalSessions");
+          pm.expect(jsonData.data.totalSessions).to.be.a("number");
+      });
+
+
+      // 7. Each session in the array has expected properties
+
+      pm.test("Each session has expected properties (sessionId, createdAt)",
+      function () {
+          const jsonData = pm.response.json();
+          const activeSessions = jsonData.data.activeSessions;
+          
+          if (activeSessions.length > 0) {
+              activeSessions.forEach((session, index) => {
+                  pm.expect(session, `Session at index ${index}`).to.have.property("sessionId");
+                  pm.expect(session.sessionId, `sessionId at index ${index}`).to.be.a("string");
+                  
+                  pm.expect(session, `Session at index ${index}`).to.have.property("createdAt");
+                  pm.expect(session.createdAt, `createdAt at index ${index}`).to.be.a("string");
+              });
+          }
+      });
+    language: text/javascript
+order: 8000

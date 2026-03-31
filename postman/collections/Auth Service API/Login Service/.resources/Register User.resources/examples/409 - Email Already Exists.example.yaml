@@ -1,0 +1,18 @@
+$kind: http-example
+request:
+  url: '{{baseUrl}}:{{loginServicePort}}/api/auth/register'
+  method: POST
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: '{"email": "existing@example.com", "password": "SecurePass123!", "name": "John Doe"}'
+response:
+  statusCode: 409
+  statusText: Conflict
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: '{"error": "Conflict", "message": "Email already exists. Please use a different email address.", "statusCode": 409, "timestamp": "2024-01-15T10:30:00.000Z", "path": "/api/auth/register"}'
+order: 2000

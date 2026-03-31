@@ -1,0 +1,3 @@
+$kind: collection
+description: Manages token invalidation and session termination (Port 3002)
+order: 2000

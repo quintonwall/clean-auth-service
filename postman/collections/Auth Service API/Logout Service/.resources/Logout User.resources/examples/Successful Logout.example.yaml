@@ -1,0 +1,23 @@
+$kind: http-example
+request:
+  url: '{{baseUrl}}:{{logoutServicePort}}/api/logout'
+  method: POST
+  headers:
+    Authorization: Bearer {{accessToken}}
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "success": true,
+        "message": "Logout successful",
+        "data": {
+          "tokenBlacklisted": true,
+          "logoutTime": "2024-01-22T20:00:00.000Z"
+        }
+      }
+order: 1000
