@@ -83,7 +83,7 @@ curl -X POST http://localhost:3000/api/auth/register \
       "email": "test@example.com",
       "createdAt": "2024-01-22T10:30:00.000Z"
     },
-    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    "accessToken": "[REDACTED: Supabase Service Role API Key]..."
   }
 }
 ```

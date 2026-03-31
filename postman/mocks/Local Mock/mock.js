@@ -35,7 +35,7 @@ const mockSessions = new Map();
 
 // Helper functions
 function generateMockToken(type = 'access') {
-  const prefix = type === 'access' ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IlJlZnJlc2gifQ';
+  const prefix = type === 'access' ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
   const randomPart = Buffer.from(JSON.stringify({
     userId: Math.random().toString(36).substring(7),
     email: 'mock@example.com',
@@ -104,6 +104,7 @@ const server = http.createServer(async (req, res) => {
   // LOGIN SERVICE ENDPOINTS (Port 3001)
   // ============================================
 
+  // @endpoint GET /health
   // Health Check - Login Service
   if (method === 'GET' && pathname === '/health') {
     sendJSON(res, 200, {
@@ -116,6 +117,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // @endpoint GET /
   // Service Info - Login Service
   if (method === 'GET' && pathname === '/') {
     sendJSON(res, 200, {
@@ -133,6 +135,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // @endpoint POST /api/auth/register
   // Register User
   if (method === 'POST' && pathname === '/api/auth/register') {
     const body = await parseBody(req);
@@ -186,6 +189,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // @endpoint POST /api/auth/login
   // Login User
   if (method === 'POST' && pathname === '/api/auth/login') {
     const body = await parseBody(req);
@@ -235,6 +239,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // @endpoint GET /api/auth/me
   // Get User Profile
   if (method === 'GET' && pathname === '/api/auth/me') {
     const token = extractToken(req);
@@ -276,6 +281,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // @endpoint POST /api/auth/refresh
   // Refresh Token
   if (method === 'POST' && pathname === '/api/auth/refresh') {
     const body = await parseBody(req);
@@ -315,6 +321,7 @@ const server = http.createServer(async (req, res) => {
   // LOGOUT SERVICE ENDPOINTS (Port 3002)
   // ============================================
 
+  // @endpoint POST /api/logout
   // Logout User
   if (method === 'POST' && pathname === '/api/logout') {
     const token = extractToken(req);
@@ -337,6 +344,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // @endpoint POST /api/logout-all
   // Logout from All Devices
   if (method === 'POST' && pathname === '/api/logout-all') {
     const token = extractToken(req);
@@ -359,6 +367,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // @endpoint POST /api/invalidate-token
   // Invalidate Specific Token
   if (method === 'POST' && pathname === '/api/invalidate-token') {
     const body = await parseBody(req);
@@ -400,6 +409,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // @endpoint GET /api/check-token/:token
   // Check Token Blacklist Status
   if (method === 'GET' && pathname.startsWith('/api/check-token/')) {
     const token = pathname.split('/api/check-token/')[1];
@@ -425,6 +435,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // @endpoint GET /api/sessions
   // Get Active Sessions
   if (method === 'GET' && pathname === '/api/sessions') {
     const token = extractToken(req);
@@ -463,6 +474,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  // @endpoint POST /api/cleanup-tokens
   // Cleanup Expired Tokens
   if (method === 'POST' && pathname === '/api/cleanup-tokens') {
     const removedCount = Math.floor(Math.random() * 10);

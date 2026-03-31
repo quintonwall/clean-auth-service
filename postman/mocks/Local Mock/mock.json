@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "name": "Local Mock",
+  "protocol": "http",
+  "port": 4500,
+  "mockSrc": "./mock.js",
+  "routes": [
+    { "method": "GET", "path": "/health" },
+    { "method": "GET", "path": "/" },
+    { "method": "POST", "path": "/api/auth/register" },
+    { "method": "POST", "path": "/api/auth/login" },
+    { "method": "GET", "path": "/api/auth/me" },
+    { "method": "POST", "path": "/api/auth/refresh" },
+    { "method": "POST", "path": "/api/logout" },
+    { "method": "POST", "path": "/api/logout-all" },
+    { "method": "POST", "path": "/api/invalidate-token" },
+    { "method": "GET", "path": "/api/check-token/:token" },
+    { "method": "GET", "path": "/api/sessions" },
+    { "method": "POST", "path": "/api/cleanup-tokens" }
+  ],
+  "autoRestartOnChange": true,
+  "logging": {
+    "level": "verbose",
+    "showBody": true
+  }
+}
