@@ -1,0 +1,16 @@
+{
+  "workspace": {
+    "id": "55838a63-ebcf-408a-9b41-3079d3f058f4"
+  },
+  "entities": {
+    "collections": [
+      "../postman/collections/Planets API Collection Copy_48821842-c923ad70-96b2-47bc-b380-a5eca2031032.postman_collection.json"
+    ],
+    "environments": [
+      "../postman/environments/Planet DEV_48821842-5e21cbf3-ffd4-46d6-87b6-824a8959d8e3.postman_environment.json"
+    ],
+    "specs": [],
+    "flows": [],
+    "globals": []
+  }
+}

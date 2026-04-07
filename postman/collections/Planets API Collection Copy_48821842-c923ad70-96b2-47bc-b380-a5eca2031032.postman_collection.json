@@ -1,0 +1,355 @@
+{
+  "info": {
+    "_postman_id": "c923ad70-96b2-47bc-b380-a5eca2031032",
+    "name": "Planets API Collection Copy",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List all planets",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has success property true\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "});",
+              "",
+              "pm.test(\"Response contains data array\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.be.an(\"array\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "824f4f7f-3386-4852-8a93-bb548ce17b0f",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/planets?sortBy=name&order=asc&page=1&pageSize=10",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "planets"
+          ],
+          "query": [
+            {
+              "key": "sortBy",
+              "value": "name",
+              "description": "Field to sort by (e.g., name, mass, distanceFromSun)"
+            },
+            {
+              "key": "order",
+              "value": "asc",
+              "description": "Sort order: 'asc' or 'desc'"
+            },
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Page number for pagination"
+            },
+            {
+              "key": "pageSize",
+              "value": "10",
+              "description": "Number of items per page"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search planets",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has success property true\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "10a3e6f4-c495-4e4a-a1f7-5e04769b24cb",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/planets/search?habitable=true&minMoons=1&maxDistance=1000&hasAtmosphere=true",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "planets",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "habitable",
+              "value": "true",
+              "description": "Filter for habitable planets (true/false)"
+            },
+            {
+              "key": "minMoons",
+              "value": "1",
+              "description": "Minimum number of moons"
+            },
+            {
+              "key": "maxDistance",
+              "value": "1000",
+              "description": "Maximum distance from the Sun (in million km)"
+            },
+            {
+              "key": "hasAtmosphere",
+              "value": "true",
+              "description": "Filter for planets with significant atmosphere"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get planet details",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has success property true\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "});",
+              "",
+              "pm.test(\"Response contains planet properties\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.have.property(\"name\");",
+              "    pm.expect(jsonData.data).to.have.property(\"distanceFromSun\");",
+              "    pm.expect(jsonData.data).to.have.property(\"diameter\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "cc054657-fc45-4253-8b42-4e1947368c67",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/planets/:name",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "planets",
+            ":name"
+          ],
+          "variable": [
+            {
+              "key": "name"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get planet weather",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has success property true\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "df97ee5a-48de-4f96-86f3-35aa1f46317b",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/planets/:name/weather",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "planets",
+            ":name",
+            "weather"
+          ],
+          "variable": [
+            {
+              "key": "name"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get planet moons",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has success property true\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "abb574b4-04f3-4de0-826c-484159e0296d",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/planets/:name/moons",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "planets",
+            ":name",
+            "moons"
+          ],
+          "variable": [
+            {
+              "key": "name"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get detailed moon orbital information",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has success property true\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "022596e6-0880-46e7-8f20-fde36fb83a5e",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/planets/:name/moons/orbits",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "planets",
+            ":name",
+            "moons",
+            "orbits"
+          ],
+          "variable": [
+            {
+              "key": "name"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Root endpoint",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "id": "580d6c39-91a6-4876-91be-7f79841ffe0f",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
