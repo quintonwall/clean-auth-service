@@ -87,9 +87,16 @@ echo -e "${GREEN}✅ Ports 3001 and 3002 are available${NC}"
 
 # Install dependencies
 echo -e "${BLUE}Installing dependencies...${NC}"
+echo -e "${BLUE}Installing Shared dependencies...${NC}"
+cd shared
+if [ ! -d "node_modules" ] || [ ! -d "node_modules/jsonwebtoken" ]; then
+    npm install
+else
+    echo -e "${GREEN}✅ Shared dependencies already installed${NC}"
+fi
 
 echo -e "${BLUE}Installing Login Service dependencies...${NC}"
-cd login-service
+cd ../login-service
 if [ ! -d "node_modules" ]; then
     npm install
 else
@@ -105,6 +112,10 @@ else
 fi
 
 cd ..
+
+ # Create logs directory if it doesn't exist
+mkdir -p logs
+
 
 # Check environment files
 echo -e "${BLUE}Checking environment configuration...${NC}"
@@ -140,9 +151,6 @@ cd logout-service
 npm run dev > ../logs/logout-service.log 2>&1 &
 LOGOUT_PID=$!
 cd ..
-
-# Create logs directory if it doesn't exist
-mkdir -p logs
 
 # Store PIDs for cleanup
 echo $LOGIN_PID > logs/login-service.pid

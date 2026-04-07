@@ -1,0 +1,38 @@
+
+> logout-service@1.0.0 dev
+> nodemon server.js
+
+[33m[nodemon] 3.1.11[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
+[32m[nodemon] starting `node server.js`[39m
+(node:70945) [MONGOOSE] Warning: Duplicate schema index on {"email":1} found. This is often due to declaring an index using both "index: true" and "schema.index()". Please remove the duplicate index definition.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:70945) [MONGODB DRIVER] Warning: useNewUrlParser is a deprecated option: useNewUrlParser has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+(node:70945) [MONGODB DRIVER] Warning: useUnifiedTopology is a deprecated option: useUnifiedTopology has no effect since Node.js Driver version 4.0.0 and will be removed in the next major version
+MongoDB Connected: localhost
+
+╭─────────────────────────────────────────╮
+│  🔓 Logout Service Started             │
+│                                         │
+│  Environment: DEVELOPMENT  │
+│  Port:        3002         │
+│  URL:         http://localhost:3002 │
+│                                         │
+│  Endpoints:                             │
+│  • POST /api/logout                    │
+│  • POST /api/logout-all                │
+│  • POST /api/invalidate-token          │
+│  • GET  /api/check-token/:token        │
+│  • GET  /api/sessions                  │
+│  • POST /api/cleanup-tokens            │
+│                                         │
+│  Health Check: /health                  │
+╰─────────────────────────────────────────╯
+      
+GET /health - ::1
+SIGTERM signal received: closing HTTP server
+HTTP server closed
+SIGINT signal received: closing HTTP server
+HTTP server closed

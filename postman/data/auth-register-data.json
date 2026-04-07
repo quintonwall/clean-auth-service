@@ -1,0 +1,62 @@
+[
+  {
+    "email": "valid.user1@example.com",
+    "password": "ValidPass1!",
+    "expectedStatus": 201,
+    "scenario": "Valid registration"
+  },
+  {
+    "email": "valid.user2@company.io",
+    "password": "Str0ng#Pass",
+    "expectedStatus": 201,
+    "scenario": "Valid registration - different domain"
+  },
+  {
+    "email": "blocked@gmail.com",
+    "password": "ValidPass1!",
+    "expectedStatus": 422,
+    "scenario": "Blocked Gmail domain"
+  },
+  {
+    "email": "blocked@hotmail.com",
+    "password": "ValidPass1!",
+    "expectedStatus": 422,
+    "scenario": "Blocked Hotmail domain"
+  },
+  {
+    "email": "weakpassword@example.com",
+    "password": "short",
+    "expectedStatus": 422,
+    "scenario": "Password too short (under 8 chars)"
+  },
+  {
+    "email": "nouppercase@example.com",
+    "password": "nouppercase1!",
+    "expectedStatus": 422,
+    "scenario": "Password missing uppercase"
+  },
+  {
+    "email": "nospecial@example.com",
+    "password": "NoSpecial1",
+    "expectedStatus": 422,
+    "scenario": "Password missing special character"
+  },
+  {
+    "email": "not-an-email",
+    "password": "ValidPass1!",
+    "expectedStatus": 422,
+    "scenario": "Invalid email format"
+  },
+  {
+    "email": "",
+    "password": "ValidPass1!",
+    "expectedStatus": 422,
+    "scenario": "Missing email"
+  },
+  {
+    "email": "valid.user3@example.com",
+    "password": "",
+    "expectedStatus": 422,
+    "scenario": "Missing password"
+  }
+]

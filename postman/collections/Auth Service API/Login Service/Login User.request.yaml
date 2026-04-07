@@ -11,9 +11,72 @@ body:
 scripts:
   - type: afterResponse
     code: |-
-      // Set next request to Get All Active Sessions on successful login
+      // ── Hotmail domain validation ──────────────────────────────────────────
+      pm.test('Hotmail email is rejected with 422 VALIDATION_ERROR', function () {
+          const requestBody = JSON.parse(pm.request.body.raw || '{}');
+          const email = (requestBody.email || '').toLowerCase();
+
+          if (email.endsWith('@hotmail.com')) {
+              pm.response.to.have.status(422);
+              const json = pm.response.json();
+              pm.expect(json.success).to.be.false;
+              pm.expect(json.error).to.eql('VALIDATION_ERROR');
+              pm.expect(json.message).to.include('@hotmail.com');
+          } else {
+              pm.expect(true).to.be.true; // skip – not a hotmail address
+          }
+      });
+
+      // ── Gmail domain validation ────────────────────────────────────────────
+      pm.test('Gmail email is rejected with 422 VALIDATION_ERROR', function () {
+          const requestBody = JSON.parse(pm.request.body.raw || '{}');
+          const email = (requestBody.email || '').toLowerCase();
+
+          if (email.endsWith('@gmail.com')) {
+              pm.response.to.have.status(422);
+              const json = pm.response.json();
+              pm.expect(json.success).to.be.false;
+              pm.expect(json.error).to.eql('VALIDATION_ERROR');
+              pm.expect(json.message).to.include('@gmail.com');
+          } else {
+              pm.expect(true).to.be.true; // skip – not a gmail address
+          }
+      });
+
+      // ── General: blocked domain returns correct error shape ───────────────
+      pm.test('Blocked domain response has correct error shape', function () {
+          const requestBody = JSON.parse(pm.request.body.raw || '{}');
+          const email = (requestBody.email || '').toLowerCase();
+          const blockedDomains = ['@hotmail.com', '@gmail.com'];
+          const isBlocked = blockedDomains.some(d => email.endsWith(d));
+
+          if (isBlocked) {
+              const json = pm.response.json();
+              pm.expect(json).to.have.property('success', false);
+              pm.expect(json).to.have.property('error', 'VALIDATION_ERROR');
+              pm.expect(json).to.have.property('message').that.is.a('string');
+          } else {
+              pm.expect(true).to.be.true; // skip – not a blocked domain
+          }
+      });
+
+      // ── Successful login still works for corporate emails ─────────────────
+      pm.test('Corporate email login succeeds (200) or returns expected error', function () {
+          const requestBody = JSON.parse(pm.request.body.raw || '{}');
+          const email = (requestBody.email || '').toLowerCase();
+          const blockedDomains = ['@hotmail.com', '@gmail.com'];
+          const isBlocked = blockedDomains.some(d => email.endsWith(d));
+
+          if (!isBlocked) {
+              pm.expect([200, 400, 401]).to.include(pm.response.code);
+          } else {
+              pm.expect(true).to.be.true; // skip – blocked domain tested above
+          }
+      });
+
+      // ── Set next request on successful login ──────────────────────────────
       if (pm.response.code === 200) {
-          pm.execution.setNextRequest("Get All Active Sessions");
+          pm.execution.setNextRequest('Get All Active Sessions');
       }
     language: text/javascript
   - type: beforeRequest

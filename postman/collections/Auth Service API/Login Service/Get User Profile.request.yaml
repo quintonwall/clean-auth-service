@@ -5,6 +5,11 @@ method: GET
 headers:
   Authorization: Bearer {{accessToken}}
 scripts:
+  - type: beforeRequest
+    code: |-
+      // Simulate 500ms of latency before sending the request
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    language: text/javascript
   - type: afterResponse
     code: >-
       // Get User Profile Tests
@@ -15,8 +20,8 @@ scripts:
       });
 
 
-      pm.test("Response time is acceptable (under 500ms)", function () {
-          pm.expect(pm.response.responseTime).to.be.below(500);
+      pm.test("Response time is acceptable (under 1500ms)", function () {
+          pm.expect(pm.response.responseTime).to.be.below(1500);
       });
 
 

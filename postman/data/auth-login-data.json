@@ -1,0 +1,56 @@
+[
+  {
+    "email": "valid.user@example.com",
+    "password": "ValidPass1!",
+    "expectedStatus": 200,
+    "scenario": "Valid login - corporate email"
+  },
+  {
+    "email": "another.user@company.io",
+    "password": "Str0ng#Pass",
+    "expectedStatus": 200,
+    "scenario": "Valid login - .io domain"
+  },
+  {
+    "email": "blocked@gmail.com",
+    "password": "ValidPass1!",
+    "expectedStatus": 422,
+    "scenario": "Blocked Gmail domain"
+  },
+  {
+    "email": "blocked@hotmail.com",
+    "password": "ValidPass1!",
+    "expectedStatus": 422,
+    "scenario": "Blocked Hotmail domain"
+  },
+  {
+    "email": "valid.user@example.com",
+    "password": "WrongPassword1!",
+    "expectedStatus": 401,
+    "scenario": "Wrong password"
+  },
+  {
+    "email": "nonexistent@example.com",
+    "password": "ValidPass1!",
+    "expectedStatus": 401,
+    "scenario": "User does not exist"
+  },
+  {
+    "email": "not-an-email",
+    "password": "ValidPass1!",
+    "expectedStatus": 422,
+    "scenario": "Invalid email format"
+  },
+  {
+    "email": "",
+    "password": "ValidPass1!",
+    "expectedStatus": 422,
+    "scenario": "Missing email"
+  },
+  {
+    "email": "valid.user@example.com",
+    "password": "",
+    "expectedStatus": 422,
+    "scenario": "Missing password"
+  }
+]

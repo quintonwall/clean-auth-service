@@ -80,6 +80,10 @@ function extractToken(req) {
   return null;
 }
 
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Create the HTTP server
 const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
@@ -141,8 +145,9 @@ const server = http.createServer(async (req, res) => {
     const body = await parseBody(req);
     const { email, password } = body;
 
+    // Missing fields → 422
     if (!email || !password) {
-      sendJSON(res, 400, {
+      sendJSON(res, 422, {
         success: false,
         message: 'Email and password are required',
         error: 'VALIDATION_ERROR'
@@ -150,6 +155,54 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    // Invalid email format → 422
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      sendJSON(res, 422, {
+        success: false,
+        message: 'Invalid email address format',
+        error: 'VALIDATION_ERROR'
+      });
+      return;
+    }
+
+    // Blocked consumer email domains → 422
+    const blockedDomains = ['@hotmail.com', '@gmail.com'];
+    const isBlockedDomain = blockedDomains.some(domain => email.toLowerCase().endsWith(domain));
+    if (isBlockedDomain) {
+      sendJSON(res, 422, {
+        success: false,
+        message: 'Consumer email addresses (@hotmail.com, @gmail.com) are not permitted. Please use a corporate email address.',
+        error: 'VALIDATION_ERROR'
+      });
+      return;
+    }
+
+    // Password length: must be 8-128 characters → 422
+    if (password.length < 8 || password.length > 128) {
+      sendJSON(res, 422, {
+        success: false,
+        message: 'Password must be between 8 and 128 characters',
+        error: 'VALIDATION_ERROR'
+      });
+      return;
+    }
+
+    // Password complexity: must have lowercase, uppercase, number, special char → 422
+    const hasLower = /[a-z]/.test(password);
+    const hasUpper = /[A-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecial = /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password);
+    if (!hasLower || !hasUpper || !hasNumber || !hasSpecial) {
+      sendJSON(res, 422, {
+        success: false,
+        message: 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character',
+        error: 'VALIDATION_ERROR'
+      });
+      return;
+    }
+
+    // Duplicate user → 409
     if (mockUsers.has(email)) {
       sendJSON(res, 409, {
         success: false,
@@ -196,9 +249,32 @@ const server = http.createServer(async (req, res) => {
     const { email, password } = body;
 
     if (!email || !password) {
-      sendJSON(res, 400, {
+      sendJSON(res, 422, {
         success: false,
         message: 'Email and password are required',
+        error: 'VALIDATION_ERROR'
+      });
+      return;
+    }
+
+    // Invalid email format → 422
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      sendJSON(res, 422, {
+        success: false,
+        message: 'Invalid email address format',
+        error: 'VALIDATION_ERROR'
+      });
+      return;
+    }
+
+    // Reject consumer email domains
+    const blockedDomains = ['@hotmail.com', '@gmail.com'];
+    const isBlockedDomain = blockedDomains.some(domain => email.toLowerCase().endsWith(domain));
+    if (isBlockedDomain) {
+      sendJSON(res, 422, {
+        success: false,
+        message: 'Consumer email addresses (@hotmail.com, @gmail.com) are not permitted. Please use a corporate email address.',
         error: 'VALIDATION_ERROR'
       });
       return;
@@ -272,6 +348,8 @@ const server = http.createServer(async (req, res) => {
       updatedAt: new Date().toISOString()
     };
 
+    console.log('[/api/auth/me] Simulating 500ms latency...');
+    await delay(500);
     sendJSON(res, 200, {
       success: true,
       data: {
